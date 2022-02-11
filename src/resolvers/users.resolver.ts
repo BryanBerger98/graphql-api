@@ -1,8 +1,9 @@
 import GQLResolver from "../interfaces/gql-resolver.interface";
+import UpdateUserInput from "../interfaces/update-user-input.interface";
 import UserInput from "../interfaces/user-input.interface";
 import User from "../interfaces/User.interface";
 
-const users: User[] = [
+let users: User[] = [
     {
         id: 1,
         name: 'Chris',
@@ -46,8 +47,16 @@ export const usersResolver: GQLResolver = {
     createUser: ({input}: {input: UserInput}): Promise<User> => {
         return new Promise((resolve, reject) => {
             const newUser = {...input, id: generateUserId()};
-            users.push(newUser);
+            users = [...users, newUser];
             resolve(newUser);
+        });
+    },
+    updateUser: ({input}: {input: UpdateUserInput}): Promise<User> => {
+        return new Promise((resolve, reject) => {
+            const userToUpdateIndex = users.findIndex(user => user.id === input.id);
+            const updatedUser = {...users[userToUpdateIndex], ...input};
+            users[userToUpdateIndex] = updatedUser;
+            resolve(updatedUser);
         });
     },
     deleteUser: ({id}: {id: number}): Promise<User> => {

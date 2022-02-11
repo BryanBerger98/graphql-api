@@ -13,6 +13,12 @@ input UserInput {
     email: String!
 }
 
+input UpdateUserInput {
+    id: Int!,
+    name: String,
+    email: String
+}
+
 type Query {
     getUsers: [User]
     getUserById(id: Int!): User
@@ -20,6 +26,7 @@ type Query {
 
 type Mutation {
     createUser(input: UserInput): User
+    updateUser(input: UpdateUserInput): User
     deleteUser(id: Int!): User
 }
 
