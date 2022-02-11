@@ -3,6 +3,10 @@ import UpdateUserInput from "../interfaces/update-user-input.interface";
 import UserInput from "../interfaces/user-input.interface";
 import User from "../interfaces/User.interface";
 
+import { PrismaClient } from '@prisma/client';
+
+const prisma = new PrismaClient();
+
 let users: User[] = [
     {
         id: 1,
@@ -29,48 +33,44 @@ let users: User[] = [
 export const usersResolver: GQLResolver = {
     getUsers: (): Promise<User[]> => {
         return new Promise((resolve, reject) => {
-            if (!users || users && users.length === 0) {
-                reject(new Error('No users registered'));
-            }
-            resolve(users);
+            prisma.user.findMany().then(resolve).catch(reject);
         });
     },
     getUserById: ({id}: {id: number}): Promise<User> => {
         return new Promise((resolve, reject) => {
-            const foundUser = users.find(user => user.id === id);
-            if (!foundUser) {
-                return reject('This user does not exist');
-            };
-            resolve(foundUser);
+            prisma.user.findUnique({
+                where: {id}
+            }).then(user => {
+                if (!user) {
+                    return reject(new Error('This user does not exist'));
+                }
+                resolve(user);
+            }).catch(reject);
         });
     },
     createUser: ({input}: {input: UserInput}): Promise<User> => {
         return new Promise((resolve, reject) => {
-            const newUser = {...input, id: generateUserId()};
-            users = [...users, newUser];
-            resolve(newUser);
+            prisma.user.create({
+                data: input
+            }).then(resolve).catch(reject);
         });
     },
     updateUser: ({input}: {input: UpdateUserInput}): Promise<User> => {
         return new Promise((resolve, reject) => {
-            const userToUpdateIndex = users.findIndex(user => user.id === input.id);
-            const updatedUser = {...users[userToUpdateIndex], ...input};
-            users[userToUpdateIndex] = updatedUser;
-            resolve(updatedUser);
+            prisma.user.update({
+                where: {id: input.id},
+                data: {
+                    email: input.email,
+                    name: input.name
+                }
+            }).then(resolve).catch(reject);
         });
     },
     deleteUser: ({id}: {id: number}): Promise<User> => {
         return new Promise((resolve, reject) => {
-            const foundUser = users.find((user, index) => {
-                if (user.id === id) {
-                    users.splice(index, 1);
-                    return user;
-                }
-            });
-            if (!foundUser) {
-                return reject('This user does not exist');
-            };
-            resolve(foundUser);
+            prisma.user.delete({
+                where: {id}
+            }).then(resolve).catch(reject);
         });
     }
 };
