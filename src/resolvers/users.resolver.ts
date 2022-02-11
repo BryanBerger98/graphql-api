@@ -7,29 +7,6 @@ import { PrismaClient } from '@prisma/client';
 
 const prisma = new PrismaClient();
 
-let users: User[] = [
-    {
-        id: 1,
-        name: 'Chris',
-        email: 'chris@evans.com'
-    },
-    {
-        id: 2,
-        name: 'Robert',
-        email: 'robert@downey-jr.com'
-    },
-    {
-        id: 3,
-        name: 'Elizabeth',
-        email: 'elizabeth@olsen.com'
-    },
-    {
-        id: 4,
-        name: 'Scarlett',
-        email: 'scarlett@johansson.com'
-    }
-];
-
 export const usersResolver: GQLResolver = {
     getUsers: (): Promise<User[]> => {
         return new Promise((resolve, reject) => {
@@ -74,10 +51,3 @@ export const usersResolver: GQLResolver = {
         });
     }
 };
-
-function generateUserId(): number {
-    const userIds = users.map(u => u.id);
-    const maxId = Math.max(...userIds);
-    const newId = maxId + 1;
-    return newId;
-}
