@@ -1,53 +1,38 @@
 import GQLResolver from "../interfaces/gql-resolver.interface";
-import UpdateUserInput from "../interfaces/update-user-input.interface";
-import UserInput from "../interfaces/user-input.interface";
-import User from "../interfaces/User.interface";
+import UserCreateInput from "../interfaces/users/user-create-input.interface";
+import UserUpdateInput from "../interfaces/users/user-update-input.interface";
 
-import { PrismaClient } from '@prisma/client';
+import UsersService from "../services/users.service";
+import User from "../interfaces/users/User.interface";
 
-const prisma = new PrismaClient();
+export default class UsersResolver implements GQLResolver {
 
-export const usersResolver: GQLResolver = {
-    getUsers: (): Promise<User[]> => {
-        return new Promise((resolve, reject) => {
-            prisma.user.findMany().then(resolve).catch(reject);
-        });
-    },
-    getUserById: ({id}: {id: number}): Promise<User> => {
-        return new Promise((resolve, reject) => {
-            prisma.user.findUnique({
-                where: {id}
-            }).then(user => {
-                if (!user) {
-                    return reject(new Error('This user does not exist'));
-                }
-                resolve(user);
-            }).catch(reject);
-        });
-    },
-    createUser: ({input}: {input: UserInput}): Promise<User> => {
-        return new Promise((resolve, reject) => {
-            prisma.user.create({
-                data: input
-            }).then(resolve).catch(reject);
-        });
-    },
-    updateUser: ({input}: {input: UpdateUserInput}): Promise<User> => {
-        return new Promise((resolve, reject) => {
-            prisma.user.update({
-                where: {id: input.id},
-                data: {
-                    email: input.email,
-                    name: input.name
-                }
-            }).then(resolve).catch(reject);
-        });
-    },
-    deleteUser: ({id}: {id: number}): Promise<User> => {
-        return new Promise((resolve, reject) => {
-            prisma.user.delete({
-                where: {id}
-            }).then(resolve).catch(reject);
-        });
+    constructor(private usersService: UsersService) {
+        this.getUsers = this.getUsers;
+        this.getUserById = this.getUserById;
+        this.createUser = this.createUser;
+        this.updateUser = this.updateUser;
+        this.deleteUser = this.deleteUser;
     }
-};
+
+    getUsers (): Promise<User[]> {
+        return this.usersService.getUsers();
+    }
+
+    getUserById({id}: {id: number}): Promise<User> {
+        return this.usersService.getUserById(id);
+    }
+
+    createUser({input}: {input: UserCreateInput}): Promise<User> {
+        return this.usersService.createUser(input);
+    }
+
+    updateUser({input}: {input: UserUpdateInput}): Promise<User> {
+        return this.usersService.updateUser(input);
+    }
+
+    deleteUser({id}: {id: number}): Promise<User> {
+        return this.usersService.deleteUser(id);
+    }
+
+}

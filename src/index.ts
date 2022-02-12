@@ -1,10 +1,10 @@
 import App from './app';
-import config from './environment/env.config';
+import envConfig from './environment/env.config';
 import { gqlResolvers } from './resolvers';
 
 const app = new App(
   gqlResolvers,
-  config.PORT,
+  envConfig.PORT,
 );
  
 app.start();
