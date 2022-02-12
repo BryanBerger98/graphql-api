@@ -4,6 +4,7 @@ import UserUpdateInput from "../interfaces/users/user-update-input.interface";
 
 import UsersService from "../services/users.service";
 import User from "../interfaces/users/User.interface";
+import GQLContext from "../interfaces/gql-context.interface";
 
 export default class UsersResolver implements GQLResolver {
 
@@ -15,23 +16,38 @@ export default class UsersResolver implements GQLResolver {
         this.deleteUser = this.deleteUser;
     }
 
-    getUsers (): Promise<User[]> {
+    getUsers({}, context: GQLContext): Promise<User[]> {
+        if (!context || context && !context.user) {
+            throw new Error('Forbidden');
+        }
         return this.usersService.getUsers();
     }
 
-    getUserById({id}: {id: number}): Promise<User> {
+    getUserById({id}: {id: number}, context: GQLContext): Promise<User> {
+        if (!context || context && !context.user) {
+            throw new Error('Forbidden');
+        }
         return this.usersService.getUserById(id);
     }
 
-    createUser({input}: {input: UserCreateInput}): Promise<User> {
+    createUser({input}: {input: UserCreateInput}, context: GQLContext): Promise<User> {
+        if (!context || context && !context.user) {
+            throw new Error('Forbidden');
+        }
         return this.usersService.createUser(input);
     }
 
-    updateUser({input}: {input: UserUpdateInput}): Promise<User> {
+    updateUser({input}: {input: UserUpdateInput}, context: GQLContext): Promise<User> {
+        if (!context || context && !context.user) {
+            throw new Error('Forbidden');
+        }
         return this.usersService.updateUser(input);
     }
 
-    deleteUser({id}: {id: number}): Promise<User> {
+    deleteUser({id}: {id: number}, context: GQLContext): Promise<User> {
+        if (!context || context && !context.user) {
+            throw new Error('Forbidden');
+        }
         return this.usersService.deleteUser(id);
     }
 

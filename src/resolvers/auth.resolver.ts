@@ -1,12 +1,9 @@
 import GQLResolver from "../interfaces/gql-resolver.interface";
-import UserCreateInput from "../interfaces/users/user-create-input.interface";
-import UserUpdateInput from "../interfaces/users/user-update-input.interface";
-
-import UsersService from "../services/users.service";
-import User from "../interfaces/users/User.interface";
 import AuthService from "../services/auth.service";
 import Credentials from "../interfaces/users/credentials.interface";
 import CredentialsInput from "../interfaces/users/credentials-input.interface";
+import GQLContext from "../interfaces/gql-context.interface";
+import User from "../interfaces/users/User.interface";
 
 export default class AuthResolver implements GQLResolver {
 
@@ -15,14 +12,24 @@ export default class AuthResolver implements GQLResolver {
     ) {
       this.signupUserWithEmailAndPassword = this.signupUserWithEmailAndPassword;
       this.signinUserWithEmailAndPassword = this.signinUserWithEmailAndPassword;
+      this.getCurrentUser = this.getCurrentUser;
     }
 
     signupUserWithEmailAndPassword({input}: {input: CredentialsInput}): Promise<Credentials> {
       return this.authService.signupUserWithEmailAndPassword(input.email, input.password);
     }
 
-    signinUserWithEmailAndPassword({input}: {input: CredentialsInput}): Promise<Credentials> {
-      return this.authService.signinUserWithEmailAndPassword(input.email, input.password);
+    async signinUserWithEmailAndPassword({input}: {input: CredentialsInput}, context: GQLContext): Promise<Credentials> {
+      const credentials = await this.authService.signinUserWithEmailAndPassword(input.email, input.password)
+      context.res.cookie('token', credentials.token);
+      return credentials;
+    }
+
+    getCurrentUser({}, context: GQLContext): User {
+      if (context.user) {
+        return context.user;
+      }
+      throw new Error('Not authenticated');
     }
 
 }

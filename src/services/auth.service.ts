@@ -1,7 +1,5 @@
 import Credentials from "../interfaces/users/credentials.interface";
 import UserCreateInput from "../interfaces/users/user-create-input.interface";
-import UserUpdateInput from "../interfaces/users/user-update-input.interface";
-import User from "../interfaces/users/User.interface";
 import UsersRepository from "../repositories/users.repository";
 import PasswordsService from "./passwords.service";
 import TokensService from "./tokens.service";

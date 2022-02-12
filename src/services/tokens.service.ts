@@ -9,8 +9,7 @@ export default class TokensService {
     createToken(user: User, action: TokenAction,  expirationDate?: Date | number) {
         const defaultExpirationDate = Math.floor(Date.now() / 1000) + (60 * 60 * 24 * 30);
         const token = jwt.sign({
-            id: user.id,
-            email: user.email,
+            user,
             exp: expirationDate ? expirationDate : defaultExpirationDate,
             action
         }, <string>envConfig.JWT_SECRET);

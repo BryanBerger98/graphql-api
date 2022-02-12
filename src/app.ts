@@ -1,7 +1,10 @@
+import { PrismaClient } from '@prisma/client';
 import express from 'express';
+import cookieParser from 'cookie-parser';
 import { graphqlHTTP } from 'express-graphql';
 import gqlSchema from './gql-schema';
 import GQLResolver from './interfaces/gql-resolver.interface';
+import AuthMiddleware from './middlewares/auth.middleware';
 import CorsMiddleware from './middlewares/cors.middleware';
 
 export default class App {
@@ -12,20 +15,20 @@ export default class App {
       this.app = express();
       this.port = port ? port : 3000;
    
-      this.initializeMiddlewares();
-
-      this.app.use('/graphql', graphqlHTTP({
-        schema: gqlSchema,
-        rootValue: resolvers,
-        graphiql: true,
-      }));
-
-    }
-   
-    private initializeMiddlewares(): void {
       this.app.use(express.json());
       this.app.use(express.urlencoded({extended: false}));
+      this.app.use(cookieParser());
       this.app.use(new CorsMiddleware().init());
+      this.app.use(new AuthMiddleware().getUser);
+
+      this.app.use('/graphql', graphqlHTTP((req, res, params) => {
+        return {
+          schema: gqlSchema,
+          rootValue: resolvers,
+          graphiql: true,
+        }
+      }));
+
     }
    
     public start(): void {

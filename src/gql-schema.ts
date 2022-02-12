@@ -34,15 +34,17 @@ input CredentialsInput {
 type Query {
     getUsers: [User]
     getUserById(id: Int!): User
+    getCurrentUser: User
 }
 
 type Mutation {
-    createUser(input: UserCreateInput): User
-    updateUser(input: UserUpdateInput): User
+    createUser(input: UserCreateInput!): User
+    updateUser(input: UserUpdateInput!): User
     deleteUser(id: Int!): User
 
-    signupUserWithEmailAndPassword(input: CredentialsInput): Credentials
-    signinUserWithEmailAndPassword(input: CredentialsInput): Credentials
+
+    signupUserWithEmailAndPassword(input: CredentialsInput!): Credentials
+    signinUserWithEmailAndPassword(input: CredentialsInput!): Credentials
 }
 
 `);

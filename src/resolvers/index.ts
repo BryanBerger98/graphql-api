@@ -10,12 +10,19 @@ import UsersResolver from "./users.resolver";
 
 const prisma = new PrismaClient();
 
-const usersRepository = new UsersRepository(prisma)
-const usersService = new UsersService(usersRepository);
-const usersResolver = new UsersResolver(usersService);
+// Side services
 const tokensService = new TokensService();
 const passwordsService = new PasswordsService();
+
+// Repositories
+const usersRepository = new UsersRepository(prisma);
+
+// Services
+const usersService = new UsersService(usersRepository);
 const authService = new AuthService(usersRepository, passwordsService, tokensService);
+
+// Resolvers
+const usersResolver = new UsersResolver(usersService);
 const authResolver = new AuthResolver(authService);
 
 export const gqlResolvers: GQLResolver = {
