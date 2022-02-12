@@ -22,7 +22,9 @@ npm i
 ```
 Set up your env variables inside a `.env` file:
 ```dosini
-PORT= #PORT OF NODE JS APPLICATION
+PORT=#YOUR PORT
+DATABASE_URL=#YOUR DB URL
+JWT_SECRET=#YOUR SECRET
 ```
 
 ## Development server
