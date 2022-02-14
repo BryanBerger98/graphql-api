@@ -41,8 +41,6 @@ type Mutation {
     createUser(input: UserCreateInput!): User
     updateUser(input: UserUpdateInput!): User
     deleteUser(id: Int!): User
-
-
     signupUserWithEmailAndPassword(input: CredentialsInput!): Credentials
     signinUserWithEmailAndPassword(input: CredentialsInput!): Credentials
 }

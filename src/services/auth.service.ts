@@ -1,4 +1,4 @@
-import Credentials from "../interfaces/users/credentials.interface";
+import Credentials from "../interfaces/auth/credentials.interface";
 import UserCreateInput from "../interfaces/users/user-create-input.interface";
 import UsersRepository from "../repositories/users.repository";
 import PasswordsService from "./passwords.service";

@@ -1,4 +1,4 @@
-import User from "./User.interface";
+import User from "../users/User.interface";
 
 export default interface Credentials {
     token: string,

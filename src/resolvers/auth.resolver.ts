@@ -1,7 +1,7 @@
 import GQLResolver from "../interfaces/gql-resolver.interface";
 import AuthService from "../services/auth.service";
-import Credentials from "../interfaces/users/credentials.interface";
-import CredentialsInput from "../interfaces/users/credentials-input.interface";
+import Credentials from "../interfaces/auth/credentials.interface";
+import CredentialsInput from "../interfaces/auth/credentials-input.interface";
 import GQLContext from "../interfaces/gql-context.interface";
 import User from "../interfaces/users/User.interface";
 
