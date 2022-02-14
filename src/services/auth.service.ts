@@ -15,7 +15,7 @@ export default class AuthService {
     async signupUserWithEmailAndPassword(email: string, password: string): Promise<Credentials> {
         try {
             const hashedPassword = await this.passwordsService.hashPassword(password);
-            const user: UserCreateInput = {
+            const user = {
                 email,
                 password: hashedPassword,
             } 

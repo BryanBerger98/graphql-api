@@ -12,7 +12,7 @@ type User {
 input UserCreateInput {
     name: String,
     email: String!,
-    password: String!
+    password: String
 }
 
 input UserUpdateInput {

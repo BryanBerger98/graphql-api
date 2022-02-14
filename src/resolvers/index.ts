@@ -18,7 +18,7 @@ const passwordsService = new PasswordsService();
 const usersRepository = new UsersRepository(prisma);
 
 // Services
-const usersService = new UsersService(usersRepository);
+const usersService = new UsersService(usersRepository, passwordsService);
 const authService = new AuthService(usersRepository, passwordsService, tokensService);
 
 // Resolvers

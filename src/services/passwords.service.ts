@@ -10,4 +10,15 @@ export default class PasswordsService {
         return bcrypt.compare(candidatePassword, password);
     }
 
+    generatePassword(): string {
+        const passwordLength = 12;
+        const passwordCharset = 'abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789@#&-_/$*!?=.+^';
+        let generatedPassword = '';
+        for (let i = 0, n = passwordCharset.length; i < passwordLength; ++i) {
+            generatedPassword += passwordCharset.charAt(Math.floor(Math.random() * n));
+        }
+        return generatedPassword;
+    }
+
+
 }
