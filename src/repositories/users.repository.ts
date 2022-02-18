@@ -1,11 +1,7 @@
 import { PrismaClient } from "@prisma/client";
-import UserCreateInput from "../interfaces/users/user-create-input.interface";
+import { CreateUser } from "../interfaces/users/user-create-input.interface";
 import UserUpdateInput from "../interfaces/users/user-update-input.interface";
 import User from "../interfaces/users/User.interface";
-
-interface UserCreateInputWithPassword extends UserCreateInput {
-    password: string;
-}
 
 export default class UsersRepository {
 
@@ -45,7 +41,7 @@ export default class UsersRepository {
         });
     }
 
-    createUser(newUser: UserCreateInputWithPassword): Promise<User> {
+    createUser(newUser: CreateUser): Promise<User> {
         return new Promise((resolve, reject) => {
             this.prisma.user.create({
                 data: newUser

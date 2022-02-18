@@ -1,4 +1,4 @@
-import UserCreateInput from "../interfaces/users/user-create-input.interface";
+import UserCreateInput, { CreateUser } from "../interfaces/users/user-create-input.interface";
 import UserUpdateInput from "../interfaces/users/user-update-input.interface";
 import User from "../interfaces/users/User.interface";
 import UsersRepository from "../repositories/users.repository";
@@ -27,7 +27,8 @@ export default class UsersService {
         try {
             const password = newUser.password ? newUser.password : this.passwordsService.generatePassword();
             const hashedPassword = await this.passwordsService.hashPassword(password);
-            const registeredUser = await this.usersRepository.createUser({...newUser, password: hashedPassword});
+            const userToRegister: CreateUser = {email: newUser.email, password: hashedPassword};
+            const registeredUser = await this.usersRepository.createUser(userToRegister);
             return registeredUser;
         } catch (error) {
             throw error;

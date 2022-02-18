@@ -3,3 +3,5 @@ export default interface UserCreateInput {
     email: string;
     password?: string;
 }
+
+export type CreateUser = Required<Pick<UserCreateInput, 'email' | 'password'>>;
